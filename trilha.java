@@ -36,7 +36,7 @@ public class trilha {
 
             if (formouTrilha(entrada, jogador)) {
                 System.out.println("🎯 Jogador " + jogador + " formou uma trilha!");
-                // no futuro: permitir remover peça do oponente
+                removerPeca(jogador, sc);
             }
 
             turno++;
@@ -74,7 +74,7 @@ public class trilha {
             posicoes.put(destino, jogador);
             if (formouTrilha(destino, jogador)) {
                 System.out.println("🎯 Jogador " + jogador + " formou uma trilha!");
-                // no futuro: permitir remover peça do oponente
+                removerPeca(jogador, sc);
             }
 
             turno++;
@@ -167,6 +167,45 @@ public class trilha {
             }
         }
         return false;
+    }
+
+    private static void removerPeca(String jogadorAtual, Scanner sc) {
+        String oponente = jogadorAtual.equals("@") ? "#" : "@";
+
+        List<String> removiveis = new ArrayList<>();
+
+        // encontra pecas do oponente fora de trilhas
+        for (String pos : posicoes.keySet()) {
+            if (posicoes.get(pos).equals(oponente) && !formouTrilha(pos, oponente)){
+                removiveis.add(pos);
+            }
+        }
+
+        // se nao existe nenhuma peca fora da trilha permite a remocao de uma peca de uma trilha
+        if (removiveis.isEmpty()){
+            for (String pos : posicoes.keySet()) {
+                if (posicoes.get(pos).equals(oponente)) {
+                    removiveis.add(pos);
+                }
+            }
+        }
+
+        if (removiveis.isEmpty()){
+            System.out.println("Nenhuma peca do jogador esta disponivel para remocao.");
+            System.out.println("Jogador " + jogadorAtual + " ganhou o jogo!");
+        }
+
+        while (true) {
+            System.out.print("Escolha uma peça do oponente (" + oponente + ") para remover: ");
+            String entrada = sc.nextLine().toUpperCase();
+            if(removiveis.contains(entrada)){
+                posicoes.put(entrada, " ");
+                System.out.println("✅ Peça em " + entrada + " removida com sucesso.");
+                break;
+            } else { 
+                System.out.println("❌ Escolha inválida. Tente uma das seguintes: " + removiveis);
+            }
+        }
     }
 
 }
