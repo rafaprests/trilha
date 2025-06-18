@@ -64,7 +64,7 @@ public class trilha {
                 continue;
             }
 
-            if (!vizinhos.get(origem).contains(destino)) {
+            if (contarPecas(jogador) > 3 && !vizinhos.get(origem).contains(destino)) {
                 System.out.println("❌ As posições não são adjacentes.");
                 continue;
             }
@@ -76,6 +76,13 @@ public class trilha {
                 System.out.println("🎯 Jogador " + jogador + " formou uma trilha!");
                 removerPeca(jogador, sc);
             }
+
+            // // verifica vitoria
+            // String oponente = jogador.equals("@") ? "#" : "@";
+            // if (contarPecas(oponente) < 3 || !temMovimentosPossiveis(oponente)){
+            //     System.out.println("🏁 Jogador " + jogador + " venceu! Oponente sem jogadas possíveis.");
+            //     break;
+            // }
 
             turno++;
         }
@@ -98,17 +105,17 @@ public class trilha {
         vizinhos.put("H", Arrays.asList("E", "G", "I"));
         vizinhos.put("I", Arrays.asList("H", "M"));
         vizinhos.put("J", Arrays.asList("A", "K", "V"));
-        vizinhos.put("K", Arrays.asList("D", "J", "L", "R"));
-        vizinhos.put("L", Arrays.asList("G", "K", "S"));
-        vizinhos.put("M", Arrays.asList("I", "N", "T"));
-        vizinhos.put("N", Arrays.asList("C", "F", "M", "O"));
-        vizinhos.put("O", Arrays.asList("N", "X"));
+        vizinhos.put("K", Arrays.asList("D", "J", "L", "S"));
+        vizinhos.put("L", Arrays.asList("G", "K", "P"));
+        vizinhos.put("M", Arrays.asList("I", "N", "R"));
+        vizinhos.put("N", Arrays.asList("F", "M", "O", "U"));
+        vizinhos.put("O", Arrays.asList("N", "C", "X"));
         vizinhos.put("P", Arrays.asList("Q", "L"));
-        vizinhos.put("Q", Arrays.asList("P", "R", "K"));
+        vizinhos.put("Q", Arrays.asList("P", "R", "T"));
         vizinhos.put("R", Arrays.asList("Q", "M"));
-        vizinhos.put("S", Arrays.asList("L", "T"));
-        vizinhos.put("T", Arrays.asList("S", "U", "M", "W"));
-        vizinhos.put("U", Arrays.asList("T", "O"));
+        vizinhos.put("S", Arrays.asList("K", "T"));
+        vizinhos.put("T", Arrays.asList("S", "U", "Q", "W"));
+        vizinhos.put("U", Arrays.asList("T", "N"));
         vizinhos.put("V", Arrays.asList("J", "W"));
         vizinhos.put("W", Arrays.asList("V", "T", "X"));
         vizinhos.put("X", Arrays.asList("O", "W"));
@@ -206,6 +213,36 @@ public class trilha {
                 System.out.println("❌ Escolha inválida. Tente uma das seguintes: " + removiveis);
             }
         }
+
+        if (contarPecas(oponente) < 3 || !temMovimentosPossiveis(oponente)) {
+            System.out.println("🏁 Jogador " + jogadorAtual + " venceu! Oponente não pode mais jogar.");
+            System.exit(0); // Encerra o jogo
+        }
+
     }
 
+    private static int contarPecas(String jogador){
+        int count = 0;
+        for(String p : posicoes.values()){
+            if (p.equals(jogador)){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static boolean temMovimentosPossiveis(String jogador) {
+        if (contarPecas(jogador) <= 3) return true;
+
+        for(String origem : posicoes.keySet()) {
+            if (posicoes.get(origem).equals(jogador)){
+                for(String vizinho : vizinhos.get(origem)){
+                    if(posicoes.get(vizinho).equals(" ")){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
