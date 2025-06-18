@@ -77,12 +77,12 @@ public class trilha {
                 removerPeca(jogador, sc);
             }
 
-            // // verifica vitoria
-            // String oponente = jogador.equals("@") ? "#" : "@";
-            // if (contarPecas(oponente) < 3 || !temMovimentosPossiveis(oponente)){
-            //     System.out.println("🏁 Jogador " + jogador + " venceu! Oponente sem jogadas possíveis.");
-            //     break;
-            // }
+            // verifica vitoria
+            String oponente = jogador.equals("@") ? "#" : "@";
+            if (contarPecas(oponente) < 3 || !temMovimentosPossiveis(oponente)){
+                System.out.println("🏁 Jogador " + jogador + " venceu! Oponente sem jogadas possíveis.");
+                break;
+            }
 
             turno++;
         }
